@@ -250,7 +250,7 @@ define([
                 $select.items = [userInputItem].concat(list);
                 $select.selected = userInputItem.url;
                 data.href = userInputItem.url;
-                applyAttrChange();
+                // applyAttrChange();
             }
         }
 

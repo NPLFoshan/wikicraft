@@ -421,6 +421,23 @@ define([
 					}
 					return undefined;
 				}
+                var fakeIconDom = [];
+                var setFakeIconPosition = function(){
+                    fakeIconDom = fakeIconDom.length > 0 ? fakeIconDom : $(".mod-container.active .fake-icon");
+                    if (fakeIconDom.length <= 0) {
+                        setTimeout(function(){
+                            setFakeIconPosition();
+                        });
+                        return;
+                    }
+                    var boxWidth = $("#preview").width();
+                    var leftDistance = boxWidth/2;
+                    var scaleSize = config.services.$rootScope.scaleSelect.scaleValue;
+                    fakeIconDom.css({
+                        "left" : leftDistance / scaleSize
+                    });
+                    fakeIconDom = [];
+                }
 				config.services.$rootScope.viewEditorClick = function(obj, $event) {
                     var isCodeView = moduleEditorParams && moduleEditorParams.show_type;
                     if (!isCodeView) {
@@ -467,7 +484,7 @@ define([
 						self.blockCache.domNode.addClass("active");
                     }
                     moduleEditorParams.setEditorObj(obj);
-                    setFakeIconPosition();
+                    setFakeIconPosition && setFakeIconPosition();
 					//console.log(params_template);
 					// moduleEditorParams.is_show = true;
 					moduleEditorParams.show_type = "editor";
@@ -524,23 +541,6 @@ define([
 				}
 
                 //console.log(moduleEditorParams, self);
-                var fakeIconDom = [];
-                var setFakeIconPosition = function(){
-                    fakeIconDom = fakeIconDom.length > 0 ? fakeIconDom : $(".mod-container.active .fake-icon");
-                    if (fakeIconDom.length <= 0) {
-                        setTimeout(function(){
-                            setFakeIconPosition();
-                        });
-                        return;
-                    }
-                    var boxWidth = $("#preview").width();
-                    var leftDistance = boxWidth/2;
-                    var scaleSize = config.services.$rootScope.scaleSelect.scaleValue;
-                    fakeIconDom.css({
-                        "left" : leftDistance / scaleSize
-                    });
-                    fakeIconDom = [];
-                }
 
 				if (moduleEditorParams && moduleEditorParams.wikiBlockStartPost != undefined) {
 					//var oldWikiBlock = moduleEditorParams.wikiBlock;
@@ -866,7 +866,6 @@ define([
                 var moduleEditorParams = config.shareMap.moduleEditorParams || {};
                 moduleEditorParams.activeContainerId = "";
                 moduleEditorParams.show_type = "knowledge";
-                console.log("markwnwiki---line 838");
 				moduleEditorParams.setKnowledge("");
 				util.$apply();
 			}
